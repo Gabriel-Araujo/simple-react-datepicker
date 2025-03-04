@@ -1,0 +1,8 @@
+.git
+node_modules
+bun.lock
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea

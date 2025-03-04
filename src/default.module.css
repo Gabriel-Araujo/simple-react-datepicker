@@ -1,0 +1,101 @@
+:root {
+    --cell-size: 40px;
+    --border-radius: 8px;
+    --dark-blue: #003764;
+    --light-blue: #bcd5e9;
+    --dark-gray: #1a1a1a;
+    --light-gray: #393838;
+    --white: #e1dfdf;
+}
+.Calendar {
+    width: fit-content;
+}
+
+.CalendarTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CalendarTop button {
+    background: none;
+}
+
+.DateButton {
+    border-radius: var(--border-radius);
+    padding: 0;
+    margin: 0;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Today {
+    border: 2px solid var(--light-gray);
+}
+
+.DateButton:focus,
+.DateButton:focus-within {
+    outline: 2px auto;
+}
+
+.DateButton:hover {
+    border-color: var(--white);
+}
+
+.Selected {
+    background-color: var(--white);
+    color: var(--dark-gray);
+}
+
+.InRange {
+    background-color: var(--dark-blue);
+    border-radius: 0;
+    width: calc(var(--cell-size) + 2px);
+}
+
+.First {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    width: calc(var(--cell-size) + 2px);
+}
+
+.Last {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    width: calc(var(--cell-size) + 2px);
+}
+
+td:has(>button.InRange, >button.First, >button.Last) {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#calendarTable {
+    border-spacing: 0;
+}
+
+@media (prefers-color-scheme: light) {
+    .Today {
+        border: 2px solid var(--white);
+    }
+
+    .Selected {
+        background-color: var(--dark-gray);
+        color: var(--white);
+    }
+
+    .InRange {
+        background-color: var(--light-blue);
+    }
+
+    .DateButton:focus,
+    .DateButton:focus-within {
+        outline: 2px auto;
+    }
+
+    .DateButton:hover {
+        border-color: var(--dark-gray);
+    }
+}

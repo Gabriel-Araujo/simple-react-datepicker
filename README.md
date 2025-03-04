@@ -1,1 +1,1 @@
-"# A simple react datepicker" 
+# A simple react datepicker
