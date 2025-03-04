@@ -1,6 +1,8 @@
 import {Locale, WeekDay} from "../types";
+import {CSSProperties} from "react";
 
 export function getDateCell(
+    styles: CSSProperties | undefined,
     day: WeekDay,
     date: Date,
     onClick?: CallableFunction,
@@ -16,7 +18,7 @@ export function getDateCell(
     const today = new Date().toISOString().split("T")[0];
 
     return (
-        <td key={day.day} role="gridcell" data-day={dateString}>
+        <td style={styles} key={day.day} role="gridcell" data-day={dateString}>
             <button
                 className={dateString === today ? "DateButton Today" : "DateButton"}
                 id={"dc" + dateString}

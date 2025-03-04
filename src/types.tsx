@@ -1,4 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
+import {CalendarStyles} from "./styles/types";
 
 export type CalendarProps = BaseProps &
     (SingleProps | MultipleProps | RangeProps)
@@ -16,6 +17,7 @@ export interface WeekDay {
 interface BaseProps {
     mode?: Mode | undefined,
     locale?: Locale | undefined
+    styles?: CalendarStyles | undefined
 }
 
 export type Locale = "en" | "pt"

@@ -1,7 +1,7 @@
 {
   "name": "sr-datepicker",
   "description": "A simple datepicker component for React",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "license": "MIT",
   "type": "module",
   "author": "Gabriel Araujo",
