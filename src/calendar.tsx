@@ -1,10 +1,11 @@
-import {Dispatch, SetStateAction, useCallback, useState, PointerEvent, useLayoutEffect} from "react";
-import {getDateCell, getWeekDays, getLocaleWeekDays, addClassesTo, removeClass, removeClasses} from "./utils";
+import {Dispatch, SetStateAction, useCallback, useState, PointerEvent, useLayoutEffect, useRef} from "react";
+import {getDateCell, getWeekDays, getLocaleWeekDays, addClassesTo, removeClassesFrom, removeClassFrom} from "./utils";
 import {CalendarProps, DateRange, WeekDay} from "./types";
 import {FIRST, IN_RANGE, LAST, SELECTED} from "./styles";
 import locales from "./locales"
 
 function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
+    const tableRef = useRef<HTMLTableElement>(null);
     const [current, setCurrent] = useState<Date>(new Date());
 
     const weeks: WeekDay[][] = getWeekDays(current);
@@ -99,42 +100,42 @@ function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
         } else {
             handleSingleSelect(e);
         }
-    }, [mode, handleSingleSelect, handleMultipleSelect, handleRangeSelect])
+    }, [mode, handleSingleSelect, handleMultipleSelect, handleRangeSelect]);
 
     useLayoutEffect(() => {
-        removeClass(SELECTED);
-        removeClass(IN_RANGE);
+        removeClassFrom(SELECTED, tableRef.current);
+        removeClassFrom(IN_RANGE, tableRef.current);
 
+        console.log(tableRef.current)
         if (mode === "single") {
-            addClassesTo([SELECTED], `dc${(props.selected as Date)?.toISOString().split("T")[0]}`);
+            addClassesTo([SELECTED], tableRef.current, `dc${(props.selected as Date)?.toISOString().split("T")[0]}`);
         } //
         else if (mode === "multiple") {
             const _selected = props.selected as Date[];
             _selected?.forEach((i) =>
-                addClassesTo([SELECTED], `dc${i.toISOString().split("T")[0]}`)
+                addClassesTo([SELECTED], tableRef.current, `dc${i.toISOString().split("T")[0]}`)
             );
         }
         else if (mode === "range") {
             const selected = props.selected as DateRange;
-            removeClasses([FIRST, LAST]);
+            removeClassesFrom([FIRST, LAST], tableRef.current);
 
 
             if (selected === undefined) return;
 
             Object.values(selected).forEach((i: Date) => {
                 const targetId = `dc${i?.toISOString().split('T')[0]}`;
-                addClassesTo([SELECTED], targetId);
+                addClassesTo([SELECTED], tableRef.current, targetId);
             })
 
 
             if (selected.from && selected.to) {
                 const [from, to] = [selected.from, selected.to];
-                const table = document.querySelector("#calendarTable");
 
-                addClassesTo([FIRST], `dc${selected.from.toISOString().split("T")[0]}`);
-                addClassesTo([LAST], `dc${selected.to.toISOString().split("T")[0]}`);
+                addClassesTo([FIRST], tableRef.current, `dc${selected.from.toISOString().split("T")[0]}`);
+                addClassesTo([LAST], tableRef.current, `dc${selected.to.toISOString().split("T")[0]}`);
 
-                table?.childNodes.item(1).childNodes.forEach(row => {
+                tableRef.current?.childNodes.item(1).childNodes.forEach(row => {
                     row.childNodes.forEach(cell => {
                         const target = new Date((cell as Element)?.getAttribute("data-day") ?? "");
                         if (target.getTime() > from.getTime?.() && target.getTime() < to.getTime()) {
@@ -144,7 +145,7 @@ function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
                 })
             }
         }
-    }, [mode, props.selected, current]);
+    }, [mode, props.selected, current, tableRef]);
 
     return (
         <div className={"Calendar"}>
@@ -153,7 +154,7 @@ function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
                 <span>{locales[locale].months[current.getMonth()]} - {current.getFullYear()}</span>
                 <button className={"NavigationButton"} onClick={handleNext}>{">"}</button>
             </div>
-            <table id={"calendarTable"}>
+            <table id={"calendarTable"} ref={tableRef}>
                 <thead aria-hidden={true}>
                 <tr>{getLocaleWeekDays(locale).map(d => <th aria-label={d[0]} key={d[0]} scope={"col"}>{d[1]}</th>)}</tr>
                 </thead>
