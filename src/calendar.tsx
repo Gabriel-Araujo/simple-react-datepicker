@@ -4,7 +4,7 @@ import {CalendarProps, DateRange, WeekDay} from "./types";
 import {FIRST, IN_RANGE, LAST, SELECTED} from "./styles";
 import locales from "./locales"
 
-function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
+function Calendar({mode = "single", locale = "en", styles, ...props}: CalendarProps) {
     const tableRef = useRef<HTMLTableElement>(null);
     const [current, setCurrent] = useState<Date>(new Date());
 
@@ -148,28 +148,30 @@ function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
     }, [mode, props.selected, current, tableRef]);
 
     return (
-        <div className={"Calendar"}>
-            <div className={"CalendarTop"}>
-                <button className={"NavigationButton"} onClick={handlePrevious}>{"<"}</button>
-                <span>{locales[locale].months[current.getMonth()]} - {current.getFullYear()}</span>
-                <button className={"NavigationButton"} onClick={handleNext}>{">"}</button>
+        <div className={"Calendar"} style={styles?.Calendar}>
+            <div className={"CalendarTop"} style={styles?.CalendarTop}>
+                <button className={"NavigationButton"} style={styles?.NavigationButtons} onClick={handlePrevious}>{"<"}</button>
+                <span style={styles?.CalendarTitle}>{locales[locale].months[current.getMonth()]} - {current.getFullYear()}</span>
+                <button className={"NavigationButton"} style={styles?.NavigationButtons} onClick={handleNext}>{">"}</button>
             </div>
-            <table id={"calendarTable"} ref={tableRef}>
-                <thead aria-hidden={true}>
-                <tr>{getLocaleWeekDays(locale).map(d => <th aria-label={d[0]} key={d[0]} scope={"col"}>{d[1]}</th>)}</tr>
+            <table id={"calendarTable"} ref={tableRef} style={styles?.CalendarTable}>
+                <thead aria-hidden={true} style={styles?.CalendarTHead}>
+                <tr>{getLocaleWeekDays(locale).map(d => (
+                    <th style={styles?.CalendarTHeadCell} aria-label={d[0]} key={d[0]} scope={"col"}>{d[1]}</th>)
+                )}</tr>
                 </thead>
-                <tbody>
+                <tbody style={styles?.CalendarTBody}>
                 <tr>
                     {[...Array(weeks[0][0].pos).keys()].map((i) => (
-                        <td key={i}></td>
+                        <td style={styles?.CalendarTBodyCell} key={i}></td>
                     ))}
                     {weeks
                         .shift()
-                        ?.map((item) => getDateCell(item, current, onClick, locale))}
+                        ?.map((item) => getDateCell(styles?.CalendarTBodyCell, item, current, onClick, locale))}
                 </tr>
                 {weeks.map((week) => (
                     <tr key={weeks.findIndex((w) => w === week)}>
-                        {week.map((day) => getDateCell(day, current, onClick, locale))}
+                        {week.map((day) => getDateCell(styles?.CalendarTBodyCell, day, current, onClick, locale))}
                     </tr>
                 ))}
                 </tbody>
