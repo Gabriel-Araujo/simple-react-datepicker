@@ -27,4 +27,4 @@ export function getDateCell(
             </button>
         </td>
     );
-};
+}

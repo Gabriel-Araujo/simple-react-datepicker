@@ -1,8 +1,8 @@
 import {Dispatch, SetStateAction, useCallback, useState, PointerEvent, useLayoutEffect} from "react";
-import {CalendarProps, DateRange, WeekDay} from "./types";
 import {getDateCell, getWeekDays, getLocaleWeekDays, addClassesTo, removeClass, removeClasses} from "./utils";
-import locales from "./locales";
-import {FIRST, IN_RANGE, LAST, SELECTED} from "./index";
+import {CalendarProps, DateRange, WeekDay} from "./types";
+import {FIRST, IN_RANGE, LAST, SELECTED} from "./styles";
+import locales from "./locales"
 
 function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
     const [current, setCurrent] = useState<Date>(new Date());
@@ -149,9 +149,9 @@ function Calendar({mode = "single", locale = "en", ...props}: CalendarProps) {
     return (
         <div className={"Calendar"}>
             <div className={"CalendarTop"}>
-                <button onClick={handlePrevious}>{"<"}</button>
-                <span>{locales.months[locale][current.getMonth()]} - {current.getFullYear()}</span>
-                <button onClick={handleNext}>{">"}</button>
+                <button className={"NavigationButton"} onClick={handlePrevious}>{"<"}</button>
+                <span>{locales[locale].months[current.getMonth()]} - {current.getFullYear()}</span>
+                <button className={"NavigationButton"} onClick={handleNext}>{">"}</button>
             </div>
             <table id={"calendarTable"}>
                 <thead aria-hidden={true}>

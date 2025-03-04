@@ -2,7 +2,7 @@ import {Locale, WeekDay} from "../types";
 import locales from "../locales";
 
 export function getLocaleWeekDays(locale: Locale): [string, string][] {
-    return Object.entries(locales.days[locale]);
+    return Object.entries(locales[locale].days);
 }
 
 export function getTotalDaysInMonth(date: Readonly<Date>): number {
